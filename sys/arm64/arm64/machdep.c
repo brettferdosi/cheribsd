@@ -28,6 +28,7 @@
 #include "opt_acpi.h"
 #include "opt_platform.h"
 #include "opt_ddb.h"
+#include "opt_md.h"
 
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
@@ -137,6 +138,11 @@ void pagezero_cache(void *);
 void (*pagezero)(void *p) = pagezero_simple;
 
 int (*apei_nmi)(void);
+
+#ifdef MD_ROOT_MEM
+extern u_char *mfs_root;
+extern int mfs_root_size;
+#endif
 
 static void
 pan_setup(void)
@@ -1422,6 +1428,14 @@ initarm(struct arm64_bootparams *abp)
 	/* Exclude entries neexed in teh DMAP region, but not phys_avail */
 	if (efihdr != NULL)
 		exclude_efi_map_entries(efihdr);
+
+#ifdef MD_ROOT_MEM
+	/* Exclude the MD image memory, and set the root pointer */
+	mfs_root_size =  0x9FFFFFFF - 0x88000000 + 1;
+	physmem_exclude_region(0x88000000, mfs_root_size, EXFLAG_NOALLOC);
+	mfs_root = (u_char *)PHYS_TO_DMAP(0x88000000);
+#endif
+
 	physmem_init_kernel_globals();
 
 	devmap_bootstrap(0, NULL);
