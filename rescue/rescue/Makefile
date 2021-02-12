@@ -112,6 +112,10 @@ CRUNCH_PROGS_sbin+= ipf
 CRUNCH_LIBS_ipf+=	${LIBIPF}
 .endif
 
+.if ${MK_NVME} != "no"
+CRUNCH_PROGS_sbin+= nvmecontrol
+.endif
+
 .if ${MK_ROUTED} != "no"
 CRUNCH_PROGS_sbin+= routed rtquery
 .endif
