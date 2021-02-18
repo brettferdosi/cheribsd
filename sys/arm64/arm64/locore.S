@@ -676,7 +676,8 @@ build_l1_block_pagetable:
 	/* Build the L1 block entry */
 	orr	x12, x7, #L1_BLOCK
 #if __has_feature(capabilities)
-	orr	x12, x12, #(ATTR_CAP_RW)
+	orr	x12, x12, #(ATTR_LC_ENABLED)
+	orr	x12, x12, #(ATTR_CDBM)
 #endif
 	orr	x12, x12, #(ATTR_DEFAULT)
 
@@ -717,7 +718,8 @@ build_l2_block_pagetable:
 	lsl	x12, x7, #2
 	orr	x12, x12, #L2_BLOCK
 #if __has_feature(capabilities)
-	orr	x12, x12, #(ATTR_CAP_RW)
+	orr	x12, x12, #(ATTR_LC_ENABLED)
+	orr	x12, x12, #(ATTR_CDBM)
 #endif
 	orr	x12, x12, #(ATTR_DEFAULT)
 	orr	x12, x12, #(ATTR_S1_UXN)
