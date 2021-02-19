@@ -1559,6 +1559,9 @@ __PMC_EV_ALIAS("unhalted-core-cycles",		IAP_ARCH_UNH_COR_CYC)
 	__PMC_EV_ALIAS("STREX_SPEC",		ARMV8_EVENT_6FH)	\
 	__PMC_EV_ALIAS("L3_CACHE_RD",		ARMV8_EVENT_A0H)
 
+#define	__PMC_EV_ALIAS_ARMV8_RAINIER()					\
+	__PMC_EV_ALIAS_ARMV8_CORTEX_A76()
+
 /*
  * MIPS Events from "Programming the MIPS32 24K Core Family",
  * Document Number: MD00355 Revision 04.63 December 19, 2008
