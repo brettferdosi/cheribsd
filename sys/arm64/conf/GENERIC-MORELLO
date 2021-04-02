@@ -35,3 +35,5 @@ nooptions 	KDTRACE_HOOKS		# Kernel DTrace hooks
 # Hybrid kernels need CHERI-aware firmware and pure-capability kernels need a
 # pure-capability interface or shims.
 nooptions 	EFIRT		# EFI Runtime Services
+
+device hwpmc
