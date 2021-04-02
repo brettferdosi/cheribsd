@@ -93,6 +93,8 @@ int freebsd64_ ## SC (struct thread *td,				\
 	return syscall_not_present(td, #SC , (struct nosys_args *)uap); \
 }
 
+int    freebsd64_syscall_module_handler(struct module *mod, int what, void
+	    *arg);
 int    freebsd64_syscall_register(int *offset, struct sysent *new_sysent,
 	    struct sysent *old_sysent, int flags);
 int    freebsd64_syscall_deregister(int *offset, struct sysent *old_sysent);

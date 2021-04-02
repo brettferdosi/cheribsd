@@ -1808,3 +1808,9 @@ freebsd64_syscall_helper_unregister(struct syscall_helper_data *sd)
 
 	return (kern_syscall_helper_unregister(freebsd64_sysent, sd));
 }
+
+int
+freebsd64_syscall_module_handler(struct module *mod, int what, void *arg)
+{
+	return (kern_syscall_module_handler(freebsd64_sysent, mod, what, arg));
+}
