@@ -677,6 +677,29 @@ struct pmc_syscall_args {
 	void * __kerncap pmop_data;	/* syscall parameter */
 };
 
+#ifdef COMPAT_FREEBSD64
+/* XXXBFG May want to get these pad definitions from elsewhere. */
+#define	PAD_(t)	(sizeof(syscallarg_t) <= sizeof(t) ? \
+		0 : sizeof(syscallarg_t) - sizeof(t))
+
+#if BYTE_ORDER == LITTLE_ENDIAN
+#define	PADL_(t)	0
+#define	PADR_(t)	PAD_(t)
+#else
+#define	PADL_(t)	PAD_(t)
+#define	PADR_(t)	0
+#endif
+
+struct pmc64_syscall_args {
+	char pmop_code_l[PADL_(register_t)]; register_t pmop_code; char pmop_code_r[PADR_(register_t)];
+	char pmop_data_l[PADL_(void *)]; void *pmop_data; char pmop_data_r[PADR_(void *)];
+};
+
+#undef PAD_
+#undef PADL_
+#undef PADR_
+#endif
+
 /*
  * Interface to processor specific s1tuff
  */

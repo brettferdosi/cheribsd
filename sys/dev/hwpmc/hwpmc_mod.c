@@ -77,6 +77,10 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_map.h>
 #include <vm/vm_object.h>
 
+#ifdef COMPAT_FREEBSD64
+#include <compat/freebsd64/freebsd64_util.h>
+#endif
+
 #include "hwpmc_soft.h"
 
 #define PMC_EPOCH_ENTER() struct epoch_tracker pmc_et; epoch_enter_preempt(global_epoch_preempt, &pmc_et)
@@ -427,6 +431,38 @@ DECLARE_MODULE(pmc, pmc_mod, SI_SUB_SYSCALLS, SI_ORDER_ANY);
 DECLARE_MODULE(pmc, pmc_mod, SI_SUB_SMP, SI_ORDER_ANY);
 #endif
 MODULE_VERSION(pmc, PMC_VERSION);
+
+#ifdef COMPAT_FREEBSD64
+/*
+ * Don't call load() via chainevh, the non-compat version
+ * will initialize the module.
+ */
+static struct syscall_module_data pmc64_syscall_mod = {
+	.chainevh =	NULL,
+	.chainarg =	NULL,
+	.offset =	&pmc_syscall_num,
+	.new_sysent =	&pmc_sysent,
+	.old_sysent =	{ .sy_narg = 0, .sy_call = NULL },
+	.flags =	SY_THR_STATIC_KLD,
+};
+
+static moduledata_t pmc64_mod = {
+	.name =		"sys64/" PMC_MODULE_NAME,
+	.evhand =	freebsd64_syscall_module_handler,
+	.priv =		&pmc64_syscall_mod,
+};
+
+/*
+ * XXXBFG Do we need to worry about ordering relative to non-compat so that
+ * the module gets initialized before the compat version is added?
+ */
+#ifdef EARLY_AP_STARTUP
+DECLARE_MODULE(pmc64, pmc64_mod, SI_SUB_SYSCALLS, SI_ORDER_ANY);
+#else
+DECLARE_MODULE(pmc64, pmc64_mod, SI_SUB_SMP, SI_ORDER_ANY);
+#endif
+MODULE_VERSION(pmc64, PMC_VERSION);
+#endif
 
 #ifdef	HWPMC_DEBUG
 enum pmc_dbgparse_state {
@@ -3377,13 +3413,21 @@ static int
 pmc_syscall_handler(struct thread *td, void *syscall_args)
 {
 	int error, is_sx_downgraded, op;
-	struct pmc_syscall_args *c;
 	void *pmclog_proc_handle;
 	void * __capability arg;
 
-	c = (struct pmc_syscall_args *)syscall_args;
-	op = c->pmop_code;
-	arg = c->pmop_data;
+#if COMPAT_FREEBSD64
+	if (!SV_CURPROC_FLAG(SV_CHERI)) {
+		op = ((struct pmc64_syscall_args *)syscall_args)->pmop_code;
+		arg = __USER_CAP_ADDR(
+		    ((struct pmc64_syscall_args *)syscall_args)->pmop_data);
+	} else
+#endif
+	{
+		op = ((struct pmc_syscall_args *)syscall_args)->pmop_code;
+		arg = ((struct pmc_syscall_args *)syscall_args)->pmop_data;
+	}
+
 	/* PMC isn't set up yet */
 	if (pmc_hook == NULL)
 		return (EINVAL);
