@@ -743,7 +743,6 @@ pmap_pte_prot(pmap_t pmap, vm_prot_t prot, u_int flags, vm_page_t m)
 		 * but it's not required.
 		 */
 		val |= (ATTR_CDBM);
-	}
 #endif
 
 	return (val);
