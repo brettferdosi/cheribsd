@@ -37,3 +37,16 @@ nooptions 	KDTRACE_HOOKS		# Kernel DTrace hooks
 nooptions 	EFIRT		# EFI Runtime Services
 
 device hwpmc
+
+# For barebones FPGA
+nodevice pci
+nodevice pci_n1sdp
+nodevice al_pci
+nooptions PCI_HP
+nooptions PCI_IOV
+nodevice iflib
+nodevice em
+nodevice ix
+nodevice nvme
+nodevice vnic
+nodevice msk
