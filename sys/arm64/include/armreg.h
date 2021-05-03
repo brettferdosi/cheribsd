@@ -110,6 +110,9 @@
 #define	CCTLR_ADRDPB_MASK	(0x1 << 4) /* ADRPD base selection */
 #define	CCTLR_PCCBO_MASK	(0x1 << 3) /* PCC base offset enable */
 #define	CCTLR_DDCBO_MASK	(0x1 << 2) /* PCC base offset enable */
+/* CCTLR_EL1 - Capability Control Register */
+#define	CCTLR_TGEN1_MASK	(0x1 << 1) /* Page table CLG bit for TTBR1 */
+#define	CCTLR_TGEN0_MASK	(0x1 << 0) /* Page table CLG bit for TTBR0 */
 #endif
 
 /* CTR_EL0 - Cache Type Register */
