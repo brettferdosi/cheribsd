@@ -3751,10 +3751,10 @@ pmap_caploadgen_update(pmap_t pmap, vm_offset_t *pva, vm_page_t *mp, int flags)
 		res = PMAP_CAPLOADGEN_TEARDOWN;
 	} else if ((oldpte & PTE_CW) == 0) {
 		KASSERT((oldpte & PTE_CD) == 0, ("!CW but CD?"));
-		res = (oldpte & PTE_D) ?
+		res = (oldpte & PTE_W) ?
 			PMAP_CAPLOADGEN_SCAN_CLEAN_RW :
 			PMAP_CAPLOADGEN_SCAN_CLEAN_RO;
-	} else if (oldpte & PTE_D) {
+	} else if (oldpte & PTE_W) {
 		res = PMAP_CAPLOADGEN_SCAN_RW;
 	} else {
 		res = PMAP_CAPLOADGEN_SCAN_RO;
