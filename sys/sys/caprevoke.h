@@ -150,7 +150,11 @@ static inline int caprevoke_epoch_clears(caprevoke_epoch now,
 static inline int
 caprevoke_is_revoked(const void * __capability cap)
 {
+#ifndef CHERI_CAPREVOKE_CLEARTAGS
 	return (__builtin_cheri_perms_get(cap) == 0);
+#else
+	return (__builtin_cheri_tag_get(cap) == 0);
+#endif
 }
 
 	/*
