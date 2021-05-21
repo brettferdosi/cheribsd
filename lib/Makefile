@@ -170,7 +170,11 @@ SUBDIR.${MK_BSNMP}+=	libbsnmp
 SUBDIR.${MK_LIBCHERI}+=	libhelloworld
 SUBDIR.${MK_CHERI}+=	libsyscalls
 
+# XXX remove this gate when atomics with capabilities work on hybrid morello
+# https://git.morello-project.org/morello/llvm-project/-/issues/26
+.if ${MACHINE_CPUARCH} != "aarch64" || ${MACHINE_ABI:Mpurecap}
 SUBDIR.${MK_CHERI_CAPREVOKE}+=	libcheri_caprevoke
+.endif
 
 .if ${MK_LIBCHERI} == "yes" && ${MACHINE_ARCH} != "mips"
 _libc_cheri=	libc_cheri
