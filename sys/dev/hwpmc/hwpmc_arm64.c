@@ -135,7 +135,7 @@ arm64_pmcr_write(uint32_t reg)
 /*
  * Performance Count Register N
  */
-static uint32_t
+static uint64_t
 arm64_pmcn_read(unsigned int pmc)
 {
 
@@ -149,7 +149,7 @@ arm64_pmcn_read(unsigned int pmc)
 }
 
 static void
-arm64_pmcn_write(unsigned int pmc, uint32_t reg)
+arm64_pmcn_write(unsigned int pmc, uint64_t reg)
 {
 
 	KASSERT(pmc < arm64_npmcs, ("%s: illegal PMC number %d", __func__, pmc));

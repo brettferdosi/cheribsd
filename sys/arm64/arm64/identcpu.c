@@ -328,7 +328,9 @@ static struct mrs_field_value id_aa64dfr0_brps[] = {
 static struct mrs_field_value id_aa64dfr0_pmuver[] = {
 	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_NONE, ""),
 	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_3, "PMUv3"),
-	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_3_1, "PMUv3+16 bit evtCount"),
+	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_3_1, "PMUv3 Armv8.1"),
+	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_3_4, "PMUv3 Armv8.4"),
+	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_3_5, "PMUv3 Armv8.5"),
 	MRS_FIELD_VALUE(ID_AA64DFR0_PMUVer_IMPL, "IMPL PMU"),
 	MRS_FIELD_VALUE_END,
 };
